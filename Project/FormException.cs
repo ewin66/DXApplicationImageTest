@@ -43,6 +43,10 @@ namespace DXApplicationImageMemory
                 Debug.WriteLine("catchOutOfMemoryException");
                 //MessageBox.Show("catchOutOfMemoryException");
             }
+            catch (ObjectDisposedException catchObjectDisposedException)
+            {
+                ////MessageBox.Show("catchImageException");
+            }
             catch (Exception catchImageException)
             {
                 ////MessageBox.Show("catchImageException");
@@ -112,7 +116,7 @@ namespace DXApplicationImageMemory
                             Image imageFromStream = Image.FromStream(fs, true);
                             if (imageFromStream != null)
                             {
-                                Image fromStreamImage = (Image)imageFromStream.Clone();
+                                Image fromStreamImage = (Image)(imageFromStream.Clone());
                                 ////ResizeImage(fromStreamImage, Properties.Settings.Default.ThumbnailSize).Save(localTempPictureFilePath, ImageFormat.Jpeg);
                                 Image localTempPictureImage = fromStreamImage.GetThumbnailImage(fromStreamImage.Width,
                                                                       fromStreamImage.Height, null, IntPtr.Zero);
@@ -126,14 +130,18 @@ namespace DXApplicationImageMemory
                                 {
                                     foreach (GalleryItem eachGalleryItem in galleryControl1.Gallery.Groups[0].Items)
                                     {
-                                        eachGalleryItem.Image = (Image)localTempPictureImage.Clone();
+                                        eachGalleryItem.Image = (Image)(localTempPictureImage.Clone());
                                     }
-                                    ////pictureEdit1.Image = (Image)localTempPictureImage.Clone();
+                                    ////pictureEdit1.Image = (Image)(localTempPictureImage.Clone());
                                 }
                                 catch (OutOfMemoryException catchOutOfMemoryException)
                                 {
                                     Debug.WriteLine("catchOutOfMemoryException");
                                     ////MessageBox.Show("catchOutOfMemoryException");
+                                }
+                                catch (ObjectDisposedException catchObjectDisposedException)
+                                {
+                                    ////MessageBox.Show("catchImageException");
                                 }
                                 catch (Exception catchImageException)
                                 {
@@ -160,6 +168,10 @@ namespace DXApplicationImageMemory
                             Debug.WriteLine("catchOutOfMemoryException");
                             //MessageBox.Show("catchOutOfMemoryException");
                         }
+                        catch (ObjectDisposedException catchObjectDisposedException)
+                        {
+                            ////MessageBox.Show("catchImageException");
+                        }
                         catch (Exception catchImageException)
                         {
                             ////MessageBox.Show("catchImageException");
@@ -181,6 +193,10 @@ namespace DXApplicationImageMemory
                 {
                     Debug.WriteLine("catchOutOfMemoryException");
                     // MessageBox.Show("catchOutOfMemoryException");
+                }
+                catch (ObjectDisposedException catchObjectDisposedException)
+                {
+                    ////MessageBox.Show("catchImageException");
                 }
                 catch (Exception catchException)
                 {
@@ -216,10 +232,10 @@ namespace DXApplicationImageMemory
                         {
                             try
                             {
-                                Image imageFromStream = Image.FromStream(fs);
+                                Image imageFromStream = new Bitmap(Image.FromStream(fs));
                                 if (imageFromStream != null)
                                 {
-                                    new Thread(new ParameterizedThreadStart(delegate (object threadObject)
+                                    ////new Thread(new ParameterizedThreadStart(delegate (object threadObject)
                                     {
                                         Thread.CurrentThread.IsBackground = true;
                                         if (!this.Disposing && !this.IsDisposed)
@@ -229,28 +245,30 @@ namespace DXApplicationImageMemory
                                                 GalleryControl threadObjectGalleryControl = null;
                                                 PictureEdit threadObjectPictureEdit = null;
                                                 Image threadObjectStreamImage = null;
-                                                if (threadObject is Object[])
-                                                {
-                                                    foreach (object eachObject in threadObject as Object[])
-                                                    {
-                                                        if (eachObject is GalleryControl)
-                                                        {
-                                                            threadObjectGalleryControl = eachObject as GalleryControl;
-                                                        }
-                                                        if (eachObject is PictureEdit)
-                                                        {
-                                                            threadObjectPictureEdit = eachObject as PictureEdit;
-                                                        }
-                                                        if (eachObject is Image)
-                                                        {
-                                                            threadObjectStreamImage = eachObject as Image;
-                                                        }
-                                                    }
-                                                }
+                                                //if (threadObject is Object[])
+                                                //{
+                                                //    foreach (object eachObject in threadObject as Object[])
+                                                //    {
+                                                //        if (eachObject is GalleryControl)
+                                                //        {
+                                                //            threadObjectGalleryControl = eachObject as GalleryControl;
+                                                //        }
+                                                //        if (eachObject is PictureEdit)
+                                                //        {
+                                                //            threadObjectPictureEdit = eachObject as PictureEdit;
+                                                //        }
+                                                //        if (eachObject is Image)
+                                                //        {
+                                                //            threadObjectStreamImage = eachObject as Image;
+                                                //        }
+                                                //    }
+                                                //}
                                                 if (threadObjectGalleryControl == null)
                                                     threadObjectGalleryControl = galleryControl1;
                                                 ////if (threadObjectPictureEdit == null)
                                                 ////    threadObjectPictureEdit = pictureEdit1;
+                                                if (threadObjectStreamImage == null)
+                                                    threadObjectStreamImage = imageFromStream;
 
                                                 try
                                                 {
@@ -258,8 +276,8 @@ namespace DXApplicationImageMemory
                                                     {
                                                         foreach (GalleryItem eachGalleryItem in threadObjectGalleryControl.Gallery.Groups[0].Items)
                                                         {
-                                                            eachGalleryItem.Image = (Image)threadObjectStreamImage.Clone();
-
+                                                            eachGalleryItem.Image = (Image)(threadObjectStreamImage.Clone());
+                                                            ////eachGalleryItem.Image = new Bitmap(threadObjectStreamImage);
                                                             {
                                                                 count1++;
                                                             }
@@ -267,7 +285,7 @@ namespace DXApplicationImageMemory
                                                     }
                                                     if (threadObjectPictureEdit != null)
                                                     {
-                                                        threadObjectPictureEdit.Image = (Image)threadObjectStreamImage.Clone();
+                                                        threadObjectPictureEdit.Image = (Image)(threadObjectStreamImage.Clone());
 
                                                         {
                                                             count2++;
@@ -279,6 +297,10 @@ namespace DXApplicationImageMemory
                                                     timer1.Stop();
                                                     Debug.WriteLine("catchOutOfMemoryException");
                                                     //MessageBox.Show("catchOutOfMemoryException");
+                                                }
+                                                catch (ObjectDisposedException catchObjectDisposedException)
+                                                {
+                                                    ////MessageBox.Show("catchImageException");
                                                 }
                                                 catch (Exception catchImageException)
                                                 {
@@ -299,7 +321,7 @@ namespace DXApplicationImageMemory
                                             ));
                                         }
                                     }
-                                    )).Start(new Object[] {imageFromStream});
+                                    ////)).Start(new Object[] {imageFromStream});
                                 }
                             }
                             catch (OutOfMemoryException catchOutOfMemoryException)
@@ -307,6 +329,10 @@ namespace DXApplicationImageMemory
                                 timer1.Stop();
                                 Debug.WriteLine("catchOutOfMemoryException");
                                 //MessageBox.Show("catchOutOfMemoryException");
+                            }
+                            catch (ObjectDisposedException catchObjectDisposedException)
+                            {
+                                ////MessageBox.Show("catchImageException");
                             }
                             catch (Exception catchImageException)
                             {
@@ -329,6 +355,10 @@ namespace DXApplicationImageMemory
                     {
                         Debug.WriteLine("catchOutOfMemoryException");
                         //MessageBox.Show("catchOutOfMemoryException");
+                    }
+                    catch (ObjectDisposedException catchObjectDisposedException)
+                    {
+                        ////MessageBox.Show("catchImageException");
                     }
                     catch (Exception catchException)
                     {

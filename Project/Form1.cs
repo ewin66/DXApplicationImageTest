@@ -258,7 +258,10 @@ namespace DXApplicationImageMemory
                                                     {
                                                         foreach (GalleryItem eachGalleryItem in threadObjectGalleryControl.Gallery.Groups[0].Items)
                                                         {
-                                                            eachGalleryItem.Image = (Image)threadObjectStreamImage.Clone();
+                                                            ////eachGalleryItem.Image = (Image)threadObjectStreamImage.Clone();
+                                                            ////eachGalleryItem.Image = threadObjectStreamImage;
+                                                            ////eachGalleryItem.Image = new Bitmap((Image)threadObjectStreamImage.Clone());
+                                                            eachGalleryItem.Image = new Bitmap(threadObjectStreamImage);
 
                                                             {
                                                                 count1++;
@@ -267,7 +270,8 @@ namespace DXApplicationImageMemory
                                                     }
                                                     if (threadObjectPictureEdit != null)
                                                     {
-                                                        threadObjectPictureEdit.Image = (Image)threadObjectStreamImage.Clone();
+                                                        ////threadObjectPictureEdit.Image = (Image)threadObjectStreamImage.Clone();
+                                                        threadObjectPictureEdit.Image = new Bitmap(threadObjectStreamImage);
                                                         {
                                                             count2++;
                                                         }
